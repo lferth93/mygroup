@@ -1,0 +1,5 @@
+node_modules/*
+package-lock.json
+err.log
+test.js
+tabla.js

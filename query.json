@@ -1,0 +1,50 @@
+{
+    "size": 500,
+    "query": {
+        "bool": {
+            "filter": [
+                {
+                    "range": {
+                        "@end": {
+                            "gte": "1572285729286",
+                            "lte": "1574877729286",
+                            "format": "epoch_millis"
+                        }
+                    }
+                },
+                {
+                    "query_string": {
+                        "analyze_wildcard": true,
+                        "query": "*"
+                    }
+                }
+            ]
+        }
+    },
+    "aggs": {
+        "byUser": {
+            "terms": {
+                "field": "username.keyword",
+                "order": {
+                    "_count": "desc"
+                },
+                "size": 500
+            },
+            "aggs": {
+                "byState": {
+                    "terms": {
+                        "field": "state.keyword",
+                        "order": {
+                            "_term": "desc"
+                        }
+                    }
+                },
+                "cpu": {
+                    "sum": {
+                        "field": "cpu_hours"
+                    }
+                }
+            }
+        }
+    }
+}
