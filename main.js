@@ -23,7 +23,7 @@ Programa para visualizar los jobs totales por usuario y estado de un grupo.
       --help, -h   Mostrar este mensaje de ayuda.
 
 	Examples
-	  $ myjobs
+	  $ mygroup
 `, {
         flags: {
         }
