@@ -1,4 +1,5 @@
 node_modules/*
+mygroup/*
 package-lock.json
 err.log
 test.js

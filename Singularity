@@ -1,6 +1,6 @@
 Bootstrap: docker
 
-From: node:buster-slim
+From: node:alpine
 
 %runscript
    opt="$USER"
@@ -23,7 +23,7 @@ From: node:buster-slim
 
    if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
    then
-      cd /myjobs
+      cd /apps
       node main.js "$opt" 2> /dev/null
    else
       echo 'Acceso denegado'
@@ -31,15 +31,15 @@ From: node:buster-slim
 
 
 %setup
-    mkdir -p ${SINGULARITY_ROOTFS}/mygroup
+    mkdir -p ${SINGULARITY_ROOTFS}/app
 
 %files
-    ./cpubar.js mygroup/cpubar.js
-    ./main.js mygroup/main.js
-    ./statebar.js mygroup/statebar.js
-    ./query.json mygroup/query.json
-    ./package.json mygroup/package.json
+    ./cpubar.js app/cpubar.js
+    ./main.js app/main.js
+    ./statebar.js app/statebar.js
+    ./query.json app/query.json
+    ./package.json app/package.json
 
 %post 
-    cd /mygroup
+    cd /app
     npm install

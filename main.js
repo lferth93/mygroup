@@ -6,10 +6,10 @@ var blessed = require('blessed')
     , cpubar = require('./cpubar.js')
     , statestack = require('./statebar.js')
     , meow = require('meow')
+const SLURMDB = process.env.ES_SLURM_DB
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://148.206.50.80:9200' })
+const client = new Client({ node: 'http://' + SLURMDB })
 let query = JSON.parse(fs.readFileSync('query.json'))
-
 
 setup().catch(console.log)
 
@@ -28,6 +28,16 @@ Programa para visualizar los jobs totales por usuario y estado de un grupo.
         flags: {
         }
     });
+
+    if (typeof SLURMDB == 'undefined' || SLURMDB == null){
+    	console.log("ERROR: No hay una base de datos establecida.")
+	process.exit()
+    }
+
+    screen.key(['escape', 'q', 'C-c'], function (ch, key) {
+        return process.exit()
+    })
+
     var grid = new contrib.grid({ rows: 7, cols: 1, screen: screen })
     var cpuBar = grid.set(0, 0, 3, 1, contrib.bar, {
         label: 'Grupo:' + cli.input[0] + ' Horas de CPU por usuario'
@@ -62,9 +72,7 @@ Programa para visualizar los jobs totales por usuario y estado de un grupo.
     cpubar.setData(cpuBar, users)
     statestack.setData(stateStack, users)
     setTable(table, users)
-    screen.key(['escape', 'q', 'C-c'], function (ch, key) {
-        return process.exit()
-    })
+    
     screen.on('resize', function () {
         cpuBar.emit('attach');
         cpubar.setData(cpuBar, users)
