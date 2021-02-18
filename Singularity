@@ -58,3 +58,4 @@ From: node:alpine
    touch /etc/localtime
    cd /app
    npm install
+   chmod 775 /app/* 

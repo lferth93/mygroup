@@ -50,7 +50,7 @@ Ejemplos
 
     var table = grid.set(0, 0, 2, 1, contrib.table, {
         fg: 'white'
-        , label: 'Grupo:Usuario Total de jobs'
+        , label: 'Grupo:'+ cli.input[0] +' Total de jobs'
         , selectedFg: 'white'
         , selectedBg: 'blue'
         , interactive: true
@@ -58,7 +58,7 @@ Ejemplos
         , height: '100%'
         , border: { type: "line", fg: "cyan" }
         , columnSpacing: 2 //in chars
-        , columnWidth:[6,6,10,10,8,8]
+        , columnWidth:[6,6,6,6,6,6]
     })
     var cpuBar = grid.set(0, 1, 1, 2, contrib.bar, {
         label: 'Horas de CPU por usuario'
@@ -128,9 +128,9 @@ async function getData(user, days) {
 }
 
 async function setTable(table, users) {
-    let data = {headers:['User','Total','COMPLETED','CANCELLED','TIMEOUT','FAILED'],data:[[]]}
+    let data = {headers:['User','Total','COMP','CANC','TIME','FAIL'],data:[]}
     for (let user of users) {
-        data.push([
+        data.data.push([
             user.name,
             user.total,
             user.COMPLETED,
