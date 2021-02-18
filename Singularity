@@ -26,7 +26,7 @@ From: node:alpine
 
    cd /app
 
-   if [ $debug==true ];then
+   if [ $debug ];then
       node main.js $@
    else
       uid=$(id -u $USER)
@@ -40,21 +40,21 @@ From: node:alpine
    fi
 
 %setup
-    mkdir -p ${SINGULARITY_ROOTFS}/app
+   mkdir -p ${SINGULARITY_ROOTFS}/app
 
 %files
-    ./cpubar.js app/cpubar.js
-    ./main.js app/main.js
-    ./statebar.js app/statebar.js
-    ./query.json app/query.json
-    ./package.json app/package.json
+   ./cpubar.js app/cpubar.js
+   ./main.js app/main.js
+   ./statebar.js app/statebar.js
+   ./query.json app/query.json
+   ./package.json app/package.json
 
 %environment
-    ES_SLURM_DB='148.206.50.80:9200'
-    export ES_SLURM_DB
+   ES_SLURM_DB='148.206.50.80:9200'
+   export ES_SLURM_DB
 
 %post 
    mkdir /LUSTRE
    touch /etc/localtime
-    cd /app
-    npm install
+   cd /app
+   npm install
