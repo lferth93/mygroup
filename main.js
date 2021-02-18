@@ -86,7 +86,7 @@ Ejemplos
 
     blessed.text({
         parent:screen,
-        left:0,
+        left:2,
         bottom:0,
         content:'Esc, q, Ctr-c para salir.',
     })
