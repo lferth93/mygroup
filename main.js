@@ -46,15 +46,28 @@ Ejemplos
         return process.exit()
     })
 
-    var grid = new contrib.grid({ rows: 7, cols: 1, screen: screen })
-    var cpuBar = grid.set(0, 0, 3, 1, contrib.bar, {
-        label: 'Grupo:' + cli.input[0] + ' Horas de CPU por usuario'
+    var grid = new contrib.grid({ rows: 2, cols: 3, screen: screen })
+
+    var table = grid.set(0, 0, 2, 1, contrib.table, {
+        fg: 'white'
+        , label: 'Grupo:Usuario Total de jobs'
+        , selectedFg: 'white'
+        , selectedBg: 'blue'
+        , interactive: true
+        , width: '100%'
+        , height: '100%'
+        , border: { type: "line", fg: "cyan" }
+        , columnSpacing: 2 //in chars
+        , columnWidth:[6,6,10,10,8,8]
+    })
+    var cpuBar = grid.set(0, 1, 1, 2, contrib.bar, {
+        label: 'Horas de CPU por usuario'
         , barWidth: 8
         , barSpacing: 6
         , xOffset: 0
         , maxHeight: 10
     })
-    var stateStack = grid.set(3, 0, 3, 1, contrib.stackedBar, {
+    var stateStack = grid.set(1, 1, 1, 2, contrib.stackedBar, {
         label: 'Jobs por estado'
         , barWidth: 8
         , barSpacing: 2
@@ -64,19 +77,6 @@ Ejemplos
         , barBgColor: ['green', 'blue', 'yellow', 'red']
     })
     let users = await getData(cli.input[0],cli.flags.days)
-    //consoleconsole.error(users)
-    var table = grid.set(6, 0, 1, 1, contrib.table, {
-        fg: 'white'
-        , selectedFg: 'white'
-        , selectedBg: 'blue'
-        , interactive: true
-        , label: 'Total de jobs'
-        , width: '100%'
-        , height: '100%'
-        , border: { type: "line", fg: "cyan" }
-        , columnSpacing: 2 //in chars
-        , columnWidth: new Array(users.length).fill(10)
-    })
     cpubar.setData(cpuBar, users)
     statestack.setData(stateStack, users)
     setTable(table, users)
@@ -88,7 +88,6 @@ Ejemplos
         statestack.setData(stateStack, users)
     });
     screen.render()
-
 }
 
 async function getData(user, days) {
@@ -129,10 +128,16 @@ async function getData(user, days) {
 }
 
 async function setTable(table, users) {
-    let data = { headers: [], data: [[]] }
+    let data = {headers:['User','Total','COMPLETED','CANCELLED','TIMEOUT','FAILED'],data:[[]]}
     for (let user of users) {
-        data.headers.push(user.name)
-        data.data[0].push(user.total)
+        data.push([
+            user.name,
+            user.total,
+            user.COMPLETED,
+            user.CANCELLED,
+            user.TIMEOUT,
+            user.FAILED
+        ])
     }
     table.setData(data)
 }
