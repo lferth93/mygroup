@@ -16,22 +16,29 @@ setup().catch(console.log)
 async function setup() {
     const cli = meow(`
 Programa para visualizar los jobs totales por usuario y estado de un grupo.
-	Usage
-	  $ mygroup 
+Usage
+    $ mygroup.simg 
 
-    Options
-      --help, -h   Mostrar este mensaje de ayuda.
+Options
+    --days n, -d n      El programa mostrara los datos de los ultimos n dias (por defecto n=30). 
+    --help, -h          Mostrar este mensaje de ayuda.
 
-	Examples
-	  $ mygroup
+Examples
+    $ mygroup.simg --d 30
 `, {
         flags: {
+            days:{
+                type:'number',
+                alias:'d',
+                default: 30,
+                isMultiple: false
+            }
         }
     });
 
     if (typeof SLURMDB == 'undefined' || SLURMDB == null){
-    	console.log("ERROR: No hay una base de datos establecida.")
-	process.exit()
+    	console.log("ERROR: No hay una base de datos de Slurm establecida.")
+	    process.exit()
     }
 
     screen.key(['escape', 'q', 'C-c'], function (ch, key) {
@@ -55,7 +62,7 @@ Programa para visualizar los jobs totales por usuario y estado de un grupo.
         , width: "100%"
         , barBgColor: ['green', 'blue', 'yellow', 'red']
     })
-    let users = await getData(cli.input[0])
+    let users = await getData(cli.input[0],cli.flags.days)
     //consoleconsole.error(users)
     var table = grid.set(6, 0, 1, 1, contrib.table, {
         fg: 'white'
@@ -83,12 +90,12 @@ Programa para visualizar los jobs totales por usuario y estado de un grupo.
 
 }
 
-async function getData(user) {
+async function getData(user, days) {
     if (user != null) {
         query.query.bool.must = [{ term: { "groupname.keyword": user } }]
     }
     var now = new Date().getTime()
-    var mbefore = now - 2592000000
+    var mbefore = now - (86400000 * days)
 
     query.query.bool.filter[0].range = {
         "@start": {

@@ -23,7 +23,7 @@ From: node:alpine
 
    if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
    then
-      cd /apps
+      cd /app
       node main.js "$opt" 2> /dev/null
    else
       echo 'Acceso denegado'
@@ -45,5 +45,7 @@ From: node:alpine
     export ES_SLURM_DB
 
 %post 
+   mkdir /LUSTRE
+   touch /etc/localtime
     cd /app
     npm install
