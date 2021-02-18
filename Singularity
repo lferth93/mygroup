@@ -4,12 +4,17 @@ From: node:alpine
 
 %runscript
    opt="$USER"
+   debug=false
 
    if [ $# -gt 0 ]; then
       case "$1" in
          -h|--help)
             node main.js --help
             exit 1
+            ;;
+         --debug)
+            debug=true
+            shift 1
             ;;
          *)
             echo  "La opcion $1 es invalida."
@@ -19,16 +24,20 @@ From: node:alpine
       esac
    fi
 
-   uid=$(id -u $USER)
+   cd /app
 
-   if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
-   then
-      cd /app
-      node main.js "$opt" 2> /dev/null
+   if [ $debug==true ];then
+      node main.js $@
    else
-      echo 'Acceso denegado'
-   fi
+      uid=$(id -u $USER)
 
+      if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
+      then
+         node main.js "$opt" 2> /dev/null
+      else
+         echo 'Acceso denegado'
+      fi
+   fi
 
 %setup
     mkdir -p ${SINGULARITY_ROOTFS}/app
