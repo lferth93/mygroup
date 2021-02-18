@@ -37,6 +37,11 @@ Ejemplos
         }
     });
 
+    if (cli.help){
+        cli.showHelp()
+        process.exit()
+    }
+
     if (typeof SLURMDB == 'undefined' || SLURMDB == null){
     	console.log("ERROR: No hay una base de datos de Slurm establecida.")
 	    process.exit()
@@ -51,6 +56,8 @@ Ejemplos
     var table = grid.set(0, 0, 2, 1, contrib.table, {
         fg: 'white'
         , label: 'Grupo:'+ cli.input[0] +' Total de jobs'
+        , keys: true
+        , interactive: true
         , selectedFg: 'white'
         , selectedBg: 'blue'
         , interactive: true
@@ -58,7 +65,7 @@ Ejemplos
         , height: '100%'
         , border: { type: "line", fg: "cyan" }
         , columnSpacing: 2 //in chars
-        , columnWidth:[6,6,6,6,6,6]
+        , columnWidth:[8,6,5,5,5,5]
     })
     var cpuBar = grid.set(0, 1, 1, 2, contrib.bar, {
         label: 'Horas de CPU por usuario'
@@ -87,6 +94,7 @@ Ejemplos
         stateStack.emit('attach')
         statestack.setData(stateStack, users)
     });
+    table.focus()
     screen.render()
 }
 
