@@ -37,7 +37,7 @@ Ejemplos
         }
     });
 
-    if (cli.help){
+    if (cli.flags.help){
         cli.showHelp()
         process.exit()
     }
@@ -83,6 +83,14 @@ Ejemplos
         , width: "100%"
         , barBgColor: ['green', 'blue', 'yellow', 'red']
     })
+
+    blessed.text({
+        parent:screen,
+        left:0,
+        bottom:0,
+        content:'Esc, q, Ctr-c para salir.',
+    })
+
     let users = await getData(cli.input[0],cli.flags.days)
     cpubar.setData(cpuBar, users)
     statestack.setData(stateStack, users)
