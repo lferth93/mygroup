@@ -16,15 +16,16 @@ setup().catch(console.log)
 async function setup() {
     const cli = meow(`
 Programa para visualizar los jobs totales por usuario y estado de un grupo.
-Usage
+Uso
     $ mygroup.simg 
 
-Options
+Opciones
     --days n, -d n      El programa mostrara los datos de los ultimos n dias (por defecto n=30). 
     --help, -h          Mostrar este mensaje de ayuda.
 
-Examples
-    $ mygroup.simg --d 30
+Ejemplos
+    $ mygroup.simg --d 20
+    $ mygroup.simg
 `, {
         flags: {
             days:{
