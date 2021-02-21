@@ -37,6 +37,8 @@ Ejemplos
         }
     });
 
+    if(Number.isNaN(cli.flags.days)){ cli.flags.days=30}
+
     if (cli.flags.help){
         cli.showHelp()
         process.exit()
